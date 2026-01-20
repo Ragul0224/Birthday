@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Patto 💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#000;overflow:hidden;color:#fff}
+
+/* HEART RAIN */
+#heartCanvas{
+ position:fixed;top:0;left:0;
+ width:100vw;height:100vh;
+ z-index:1;pointer-events:none;
+}
+
+/* SLIDER */
+.slider{
+ display:flex;width:500vw;height:100vh;
+ transition:transform 1.2s cubic-bezier(.77,0,.18,1);
+ position:relative;z-index:2;
+}
+section{
+ width:100vw;height:100vh;
+ display:flex;flex-direction:column;
+ justify-content:center;align-items:center;
+ text-align:center;padding:20px;
+}
+
+/* TEXT */
+.typing{border-right:3px solid pink;white-space:nowrap;overflow:hidden}
+.jump span{display:inline-block;animation:jump 1.2s infinite}
+.jump span:nth-child(even){animation-delay:.15s}
+@keyframes jump{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+
+/* ARROWS */
+.arrow{
+ position:fixed;top:50%;transform:translateY(-50%);
+ width:60px;height:60px;border-radius:50%;
+ border:none;font-size:34px;
+ background:rgba(255,20,147,.35);
+ color:#fff;cursor:pointer;
+ z-index:10;box-shadow:0 0 25px hotpink;
+}
+#prev{left:20px} #next{right:20px}
+
+/* GALLERY */
+.gallery{
+ width:90%;height:65vh;overflow-y:auto;
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+ gap:18px;
+}
+.gallery img{
+ width:100%;height:220px;object-fit:cover;
+ border-radius:25px;
+ box-shadow:0 15px 35px rgba(0,0,0,.6);
+}
+
+/* PUZZLE */
+.puzzle-controls button{
+ margin:8px;padding:10px 22px;
+ border:none;border-radius:25px;
+ background:hotpink;color:#000;
+ font-weight:bold;cursor:pointer;
+}
+.puzzle{display:grid;gap:4px;margin-top:20px;width:300px}
+.tile{cursor:pointer}
+.msg{
+ margin-top:20px;font-size:22px;
+ color:#ffd1e8;text-shadow:0 0 15px hotpink;
+}
+
+/* BACKGROUND */
+#p1{background:radial-gradient(circle,#ff9a9e,#000)}
+#p2{background:linear-gradient(135deg,#ff6a88,#ff99ac)}
+#p3{background:linear-gradient(120deg,#c471ed,#f64f59)}
+#p4{background:linear-gradient(135deg,#ffdde1,#000)}
+#p5{background:radial-gradient(circle,#fbc8d4,#000)}
+</style>
+</head>
+
+<body>
+
+<canvas id="heartCanvas"></canvas>
+
+<button id="prev" class="arrow" onclick="prev()">❮</button>
+<button id="next" class="arrow" onclick="next()">❯</button>
+
+<div class="slider" id="slider">
+
+<section id="p1">
+<h1 class="typing" id="typeText"></h1>
+</section>
+
+<section id="p2">
+<h1>Our Memories 💕</h1>
+<div class="gallery">
+<script>
+for(let i=1;i<=20;i++){
+ document.write(`<img src="images/photo${i}.jpeg">`);
+}
+</script>
+</div>
+</section>
+
+<section id="p3">
+<h1 class="jump">
+<span>A</span><span>b</span><span>o</span><span>u</span><span>t</span>
+<span> </span>
+<span>P</span><span>a</span><span>t</span><span>t</span><span>o</span> 💕
+</h1>
+<p>You are my best friend  💕</p>
+<p>Epavum sirichitey iru ok va chinna chinna visiyathukula oodaiyatha aprm niyaee una pathiya thapa naichikatha unala mudija aalavuku ni<br>
+  panra ellam wrk tha panra apayen niyae una low ah feel pana vachikura wrk kandipa kadaikum una un passion vidatha sollala athaium paru<br>
+  athey time la konjam padi ethachum oru language padichatha ulla poga mudium seri athalam vidu ni enaku mattum tha bestfrnd <br>
+  atha jishnu ku la illa ok va madam na una naraiya hurt pani iruka poney sry elathukum seriya oi oi oi poney  ayoooooo onum illaaa unta onu solanu onuuu💕</p>
+</section>
+
+<section id="p4">
+<h1>Friendship Puzzle 💕</h1>
+
+<div class="puzzle-controls">
+<button onclick="startPuzzle(2,'images/puzzle1.jpeg')">Easy</button>
+<button onclick="startPuzzle(3,'images/puzzle2.jpeg')">Medium</button>
+<button onclick="startPuzzle(4,'images/puzzle3.jpeg')">Hard</button>
+</div>
+
+<div id="puzzle" class="puzzle"></div>
+<div id="msg" class="msg"></div>
+</section>
+
+<section id="p5">
+<h1 class="jump">
+<span>T</span><span>h</span><span>a</span><span>n</span><span>k</span>
+<span> </span>
+<span>Y</span><span>o</span><span>u</span> 💕
+</h1>
+<p>Best Friends Forever and once again hpy bday gurl💕</p>
+</section>
+
+</div>
+
+<script>
+/* SLIDER */
+let index=0;
+const slider=document.getElementById("slider");
+function update(){slider.style.transform=`translateX(-${index*100}vw)`;}
+function next(){if(index<4){index++;update();}}
+function prev(){if(index>0){index--;update();}}
+
+/* TYPING */
+const text="Hey Poney Happy Birthday 💕";
+let ti=0;
+(function type(){
+ if(ti<text.length){
+  document.getElementById("typeText").innerHTML+=text[ti++];
+  setTimeout(type,120);
+ }
+})();
+
+/* HEART RAIN */
+const canvas=document.getElementById("heartCanvas");
+const ctx=canvas.getContext("2d");
+let w,h;
+function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+resize();onresize=resize;
+
+class Heart{
+ constructor(){this.reset()}
+ reset(){
+  this.x=Math.random()*w;
+  this.y=Math.random()*-h;
+  this.size=16+Math.random()*26;
+  this.speed=0.6+Math.random()*1.2;
+  this.alpha=0.4+Math.random()*0.6;
+ }
+ draw(){
+  ctx.globalAlpha=this.alpha;
+  ctx.font=this.size+"px Arial";
+  ctx.fillText("💕",this.x,this.y);
+ }
+ update(){this.y+=this.speed;if(this.y>h)this.reset()}
+}
+let hearts=[];
+for(let i=0;i<220;i++) hearts.push(new Heart());
+(function animate(){
+ ctx.clearRect(0,0,w,h);
+ hearts.forEach(h=>{h.update();h.draw()});
+ requestAnimationFrame(animate);
+})();
+
+/* ===== PUZZLE (FIXED & WORKING) ===== */
+let firstTile=null;
+
+function startPuzzle(size,img){
+ const puzzle=document.getElementById("puzzle");
+ const msg=document.getElementById("msg");
+ puzzle.innerHTML=""; msg.innerHTML="";
+ puzzle.style.gridTemplateColumns=`repeat(${size},1fr)`;
+
+ let order=[...Array(size*size).keys()].sort(()=>Math.random()-0.5);
+
+ order.forEach((pos,correct)=>{
+  let t=document.createElement("div");
+  t.className="tile";
+  t.style.paddingTop="100%";
+  t.style.backgroundImage=`url(${img})`;
+  t.style.backgroundSize=`${size*100}% ${size*100}%`;
+
+  let x=pos%size, y=Math.floor(pos/size);
+  t.style.backgroundPosition=
+   `${(-x*100)/(size-1)}% ${(-y*100)/(size-1)}%`;
+
+  t.dataset.current=pos;
+  t.dataset.correct=correct;
+  t.onclick=()=>selectTile(t);
+  puzzle.appendChild(t);
+ });
+}
+
+function selectTile(t){
+ if(!firstTile){
+  firstTile=t;
+  t.style.outline="3px solid hotpink";
+  return;
+ }
+ swapTiles(firstTile,t);
+ firstTile.style.outline="none";
+ firstTile=null;
+ checkPuzzle();
+}
+
+function swapTiles(a,b){
+ let p=a.style.backgroundPosition;
+ a.style.backgroundPosition=b.style.backgroundPosition;
+ b.style.backgroundPosition=p;
+
+ let d=a.dataset.current;
+ a.dataset.current=b.dataset.current;
+ b.dataset.current=d;
+}
+
+function checkPuzzle(){
+ let solved=[...document.querySelectorAll(".tile")]
+  .every(t=>t.dataset.current===t.dataset.correct);
+ if(solved){
+  document.getElementById("msg").innerHTML=
+   "Best Friends Forever Poney 💕";
+  setTimeout(()=>next(),2500);
+ }
+}
+</script>
+
+</body>
+</html>
